@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tejas's Site</title>
+    <script src="./static/prism.js" defer></script>
+    <script src="./main.js" defer></script>
+    <link rel="stylesheet" href="./style.css">
+    <!-- Put in your HTML <head> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/TejasIsCool/MathToHTML@v0.1.2/dist/math-eq.min.js" defer></script>
+    <link rel="stylesheet" href="./static/prism.css">
+</head>
+<body>
+    
+    <!-- Navbar or something -->
+    <div class="navbar">
+        <div class="title">Tejas's Site or smth</div>
+        <div class="links">
+            <button onclick="change_theme()" id="theme_changer">Theme : Dark</button>
+            <a href="../../index.html">Home</a>
+            <a class="last" href="../index.html">Cs</a>
+        </div>
+    </div>
+
+    <div style="white-space: pre-line;">
+        <h1>So, what is currying???</h1>
+        Let me talk a little bit about types first.
+        
+        Types are, in some sense, a classification of objects.
+        <details><summary>For now, we will assume types as basically the same as sets.</summary>
+            Types are a bit different.
+            There is a notion that one object cannot belong to multiple types. But in sets, one object can be part of many sets.
+            We won't be covering anything related to that in this page, so for our purpose, types are basically sets.
+            If you are interested, <a href="https://cs.stackexchange.com/questions/91330/what-exactly-is-the-semantic-difference-between-set-and-type">check this out</a>.
+            I myself am not very knowledgeable on type theory, so if there is an error here, let me know.
+        </details>
+
+        Any object of certain type, in haskell is denoted like 
+        <pre><code class="language-haskell typed type-ex">
+            a :: Integer
+            a = 2       -- Things after -- are comments.
+        </code></pre>
+        This means, we are saying that the variable a is of type Integer (ie, contained in the Integer set) denoted by <code class="language-haskell typed type-ex">a :: Integer</code>,
+        and the line after is the definition of a, which we are saying is 2.
+
+        A function <m-eq>f : A \to B</m-eq> is something, which for every element of type <m-eq>A</m-eq>, associates exactly one element of type <m-eq>B</m-eq>.
+        In haskell, we could write it like
+        <pre><code class="language-haskell typed type-ex2">
+            f :: Integer -> Integer
+            f x = x*x
+        </code></pre>
+        In usual sense, in the type <code class="language-haskell">Integer -> Integer</code>, the first Integer denotes input input type, and the second one denotes the output type.
+        And in the definition, variables on the left of the <m-eq>=</m-eq>, are the names of the input the function <m-eq>f</m-eq> is taking in, 
+        and on the right, is what the function <m-eq>f</m-eq> will output.
+
+        I'll now show you another example.
+        <pre class="line-numbers"><code class="language-haskell typed type-ex2">
+            f :: Integer -> Integer
+            f x = x*x  -- As defined above
+
+            g :: Integer -> Integer
+            g = f
+        </code></pre>
+        Observe, that <m-eq>g</m-eq> looks like it is not taking in any input, and is returning the function <m-eq>f</m-eq> !!!
+        We can think of it, as renaming the function <m-eq>f</m-eq> to <m-eq>g</m-eq> here. So <m-eq>g</m-eq> becomes just another name for <m-eq>f</m-eq>.
+        If I ask you what is <code class="language-haskell typed type-ex2">g 2</code> (giving the number <m-eq>2</m-eq> to <m-eq>g</m-eq> as input), it seems obvious to give that input to <m-eq>f</m-eq>, evaluate it, and return back.
+        And in this case, we would get the output as <m-eq>4</m-eq>.
+        <pre class="command-line" data-prompt="ghci>" data-output="2, 4-6">
+            <code class="language-haskell typed type-ex2">
+                g 2
+                4
+            </code>
+        </pre> (ghci is haskell's interactive code runner)
+        In some sense, when we write <code class="language-haskell typed type-ex2">g :: Integer -> Integer</code>
+        To make it valid haskell, the definition of <m-eq>g</m-eq> must produce something of the type <code class="language-haskell typed type-ex2">Integer -> Integer</code>.
+        And we achieved that by return the function <m-eq>f</m-eq> here.
+        Point being that functions themselves can be though of as values, they can be named into a variable, returned or passed around.
+
+        I'll tell you the significance of this observation in a bit.
+
+        Lets try to make a function that takes in two inputs.
+        <pre class="line-numbers"><code class="language-haskell typed type-ex3">
+            f2 :: Integer -> Integer -> Integer
+            f2 x y = x*y
+        </code></pre>
+        This seems like a strange way of writing this. Why is there an arrow between the first two Integers when we are giving the type?
+        Set theoretically, it makes more sense like 
+        &emsp;<m-eq>f2: (Integer × Integer) \to Integer</m-eq>
+        I'll get to this in a bit as well. Just go with it for now.
+
+        So <code class="language-haskell typed type-ex3">f2 :: Integer -> Integer -> Integer</code> is somewhat indicating that the first two <m-eq>Integers</m-eq> are the inputs,
+        and the third <m-eq>Integer</m-eq> is the output type.
+
+        But, like above, there are more things that can satisfy the same type.
+        <pre class="line-numbers"><code class="language-haskell typed type-ex3">
+            f :: Integer -> Integer
+            f x = x*x 
+
+            f2 :: Integer -> Integer -> Integer
+            f2 x y = x*y
+
+            g2 :: Integer -> Integer -> Integer
+            g2 = f2 -- Similar logic to g above.
+
+            h2 :: Integer -> Integer -> Integer
+            h2 z = f
+        </code></pre>
+        Hey! Whats going on with the last example?!
+        
+        In haskell, the arrows in the function type are right-associative, ie, by default, <code class="language-haskell typed type-ex3">h2 :: Integer -> Integer -> Integer</code>
+        is read as <code class="language-haskell typed type-ex3">h2 :: Integer -> (Integer -> Integer)</code> and not <code class="language-haskell typed type-ex3">h2 :: (Integer -> Integer) -> Integer</code>
+        So h2 is taking as input an integer, and returning something of type <m-eq>(Integer \to Integer)</m-eq>, ie, a function!
+        In the specific case above, it completely ignores the inputted <m-eq>z</m-eq>, and just returns the function <m-eq>f</m-eq>.
+
+        So functions can return functions, as long as the types work.
+        They can also take in functions as input too!
+        <pre class="match-braces rainbow-braces"><code class="language-haskell typed type-ex4">
+            h4 :: (Integer -> Integer) -> Integer
+            h4 a = a 2
+        </code></pre>
+        Since haskell is right associative on function type arrows, we have to put the brackets there.
+        Here, it is inputting a function <m-eq>a</m-eq>, of type <m-eq>(Integer \to Integer)</m-eq>, and as an output, it is returning an Integer. See if you can see how, and try to guess the output of <code class="language-haskell typed type-ex4">h4 f</code>, (<code class="language-haskell typed type-ex4">f</code> defined in above code block).
+
+
+        Back to currying.
+        
+        Why did we denote the type of taking in two inputs as <code class="language-haskell typed type-ex3">f2 :: Integer -> Integer -> Integer</code>?
+        If we take the right associativity of function type arrows, this would mean that <code class="language-haskell typed type-ex3">f2 :: Integer -> (Integer -> Integer)</code>.
+
+        But we can see it taking two inputs above! Why not have something like?
+        <pre class="line-numbers match-braces rainbow-braces"><code class="language-haskell typed type-ex5">
+            f2 :: (Integer × Integer) -> Integer -- Not valid haskell code!
+            f2 (x,y) = x*y
+        </code></pre>
+
+        Well, you can! The syntax/way of writing is a bit different, but
+        <pre class="line-numbers match-braces rainbow-braces"><code class="language-haskell typed type-ex6">
+            f2' :: (Integer, Integer) -> Integer
+            f2' (x,y) = x*y
+        </code></pre> works! The <m-eq>(Integer, Integer)</m-eq> represents all pairs of Integers as a tuple.
+
+        So why <code class="language-haskell typed type-ex3">f2 :: Integer -> (Integer -> Integer)</code>?
+
+        Here, let me show you something cool.
+        with the definition as
+        <pre class="line-numbers"><code class="language-haskell typed type-ex3">
+            f2 :: Integer -> Integer -> Integer
+            f2 x y = x*y
+        </code></pre>What happens if we only give one input to it, as the right associativity of function typing would suggest?
+
+        <pre class="command-line" data-prompt="ghci>" data-output="2, 3-6">
+            <code class="language-haskell typed type-ex3">
+                f2 3
+                &lt;interactive&gt;:13:1: <span style="color: #FF0000;">error</span>: [<span style="color: #FF0000;">GHC-39999</span>]
+                • No instance for ‘Show (Integer -> Integer)’
+                    arising from a use of ‘print’
+                    (maybe you haven't applied a function to enough arguments?)
+                • In a stmt of an interactive GHCi command: print it
+            </code>
+        </pre> An error...
+
+        But looking more carefully, this isin't a logical or syntax error, but an error indicating that haskell could not print the output.
+        Reading even more carefully, it says has no instance of "<code class="language-haskell">Show (Integer -> Integer)</code>", 
+        which means haskell does not know how to show something of the type <code class="language-haskell">Integer -> Integer</code>. But where did that come from?
+
+        Lets see what the type of <code class="language-haskell typed type-ex3">f2 3</code> is.
+        <pre class="command-line" data-prompt="ghci>" data-output="2, 4-6">
+            <code class="language-haskell typed type-ex3">
+                :t (f2 3) -- :t gives the type of an object
+                (f2 3) :: Integer -> Integer
+            </code>
+        </pre>
+        So <code class="language-haskell typed type-ex3">f2 3</code> is a function?!
+        
+        Yes. Lets see what happens if we use it as a function, and give it another input.
+        <pre class="command-line" data-prompt="ghci>" data-output="2, 4-6">
+            <code class="language-haskell typed type-ex3">
+                (f2 3) 7
+                21
+            </code>
+        </pre>
+        So its working as it was defined, just that the inputs were given in a strange manner.
+
+        This notion, of having a multi-input function, being converted to a function giving another function on one input, is called currying.
+        
+        This is what is kind of happening internally when we write the function definition.
+        <pre class="line-numbers"><code class="language-haskell typed type-ex3">
+            f2 :: Integer -> Integer -> Integer
+            f2 x y = x*y
+
+            -- Is essentially
+            f2_internal :: Integer -> Integer -> Integer
+            f2_internal x = partial_f where
+                partial_f y = x * y
+            -- 'where' allows us to define a function or variables in body of another function.
+        </code></pre>
+        And when we write <code class="language-haskell typed type-ex3">f2 3 7</code>,
+        that is run as <code class="language-haskell typed type-ex3">(f2 3) 7</code>
+        (This suggests that function application is left associative! Ie, brackets happen like <code class="language-haskell typed type-ex3">(f2 3) 7</code> and not <code class="language-haskell typed type-ex3">f2 (3 7)</code>)
+
+        This is true for <b>all</b> multi-input functions in haskell!
+        The way haskell works is by considering every multi-input function as a single input function, which takes in one input,
+        and returns a function, which can take another input and so on.
+
+        The inputs which have already been taken, stay in the scope of the internal function.
+        Above, <code class="language-haskell typed type-ex3">partial_f</code> is able to access the variable <code class="language-haskell typed type-ex3">x</code>,
+        even though it does not explicitly take it as an input.
+        <hr>
+        So, more explicitly (copied from wikipedia):
+        <b>Currying</b> is the technique of translating a function that takes multiple arguments, into a sequence of families of functions, each taking a single argument.
+        (Ie, converting from multiple input function, to functions which take in one input, and give out another function which can take another input, and so on).
+
+        So instead of taking inputs as pairs/tuples, you can take them one by one.
+        When you only give some of the inputs to the function, that is called <b>partial application</b> of the function.
+
+        Actually though, both styles of taking inputs are essentially same/equivalent/isomorphic/similar.
+        By that, I mean that you can show a bijection between all functions of type <m-eq>f :: (Integer, Integer) \to Integer</m-eq>
+        and of type <m-eq>g :: Integer \to (Integer \to Integer)</m-eq>.
+
+        In maths notation, this means for any three sets <m-eq>A, B, C</m-eq>
+        <m-eq>C^{A × B} \cong (C^B)^A}</m-eq>.
+        Where, for sets <m-eq>X,Y</m-eq>, 
+        <m-eq>Y^X = \{Set of all functions from X to Y}</m-eq>.
+        And <m-eq>X \cong Y</m-eq> means <m-eq>|X| = |Y|, ie, ∃ bijection from X \to Y</m-eq> here.
+        <details style="white-space: initial;"><summary>Why is <m-eq>Y^X</m-eq> the notation of <m-eq>all functions from X to Y</m-eq>?</summary>
+            Suppose <m-eq>X</m-eq> and <m-eq>Y</m-eq> were two finite sets, with cardinality <m-eq>|X|</m-eq> and <m-eq>|Y|</m-eq>.<br>
+            Can you count the number of functions from <m-eq>X</m-eq> to <m-eq>Y</m-eq>?
+
+        </details>
+        I will leave it as an exercise for you to show this bijection.
+
+        And this is why we write the type as <code class="language-haskell typed type-ex3">Integer -> Integer -> Integer</code> when taking in two inputs, as it is equivalent to taking it as a pair.
+        While simultaneously allowing us to partially give the inputs as well.
+
+        Infact, haskell itself gives this bijection to you, via its <code class="language-haskell typed type-ex7">curry</code> function, and its inverse <code class="language-haskell typed type-ex7">uncurry</code>.
+        <pre class="command-line" data-prompt="ghci>" data-output="2,4,6,8,10,12">
+            <code class="language-haskell typed type-ex7">
+                :t curry
+                curry :: ((a, b) -> c) -> a -> b -> c
+                :t uncurry
+                uncurry :: (a -> b -> c) -> (a, b) -> c
+                :t f2
+                f2 :: Integer -> Integer -> Integer
+                :t (uncurry f2)
+                (uncurry f2) :: (Integer, Integer) -> Integer
+                (uncurry f2) (3,4)   
+                12
+                :t curry (uncurry f2)
+                curry (uncurry f2) :: Integer -> Integer -> Integer
+            </code>
+        </pre>
+        (The <code class="language-haskell">a</code>,<code class="language-haskell">b</code>,<code class="language-haskell">c</code> in lowercase stand for any arbitrary type, indicating that curry and uncurry work for all types of objects.)
+
+        Try making your own curry and uncurry function in haskell using the bijection in the exercise above.
+
+
+
+
+    
+    </div>
+
+    <!-- <pre class="match-braces rainbow-braces"><code class="language-haskell typed type-test" >
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) = 
+    let smallerSorted = quicksort [a | a <- xs, a <= x]
+        biggerSorted  = quicksort [a | a <- xs, a > x]
+    in  smallerSorted ++ [x] ++ biggerSorted
+</code></pre> -->
+
+<!-- ghci> :{
+ghci| f2 :: Integer -> Integer -> Integer
+ghci| f2 x y = x*y
+ghci| :}
+ghci> :t f2
+f2 :: Integer -> Integer -> Integer
+ghci> f2 3
+
+<interactive>:13:1: error: [GHC-39999]
+    • No instance for ‘Show (Integer -> Integer)’
+        arising from a use of ‘print’
+        (maybe you haven't applied a function to enough arguments?)
+    • In a stmt of an interactive GHCi command: print it
+ghci> :t (f2 3)
+(f2 3) :: Integer -> Integer 
+
+ghci> :t ((f2 3) 4)
+((f2 3) 4) :: Integer
+
+-->
+
+   
+</body>
+</html>

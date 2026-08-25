@@ -1,0 +1,50 @@
+.navbar{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #5a5a5a;
+        color:#b9b9b9;
+        padding: 10px 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+
+        .title{
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .links{
+            display: flex;
+            gap: 10px;
+            a{
+                color: #b9b9b9;
+                text-decoration: none;
+                font-weight: bold;
+                padding-right: 6px;
+                border-right-style:solid;
+            }
+            .last {
+                border-right-style: none;
+            }
+        }
+}
+
+.content{
+    margin-top: 50px;
+}
+
+.multiline{
+    white-space: pre-wrap;
+}
+
+.subscript{
+    vertical-align: sub;
+}
+
+.small{
+    font-size: 12px;
+}
+
