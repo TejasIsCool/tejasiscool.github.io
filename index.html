@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPMM9KL5KL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-NPMM9KL5KL');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main page</title>
@@ -11,5 +20,27 @@
     
     Url to cs problems:
     <a href="./csproblems/index.html">CS PROBLEMS</a>
+
+    <script>
+        let actions = [];
+        let secret_code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]
+        document.addEventListener("keyup", event => {
+            if (actions.length >= 10) {
+                actions = actions.slice(1,10);
+            }
+            actions.push(event.key);
+            console.log(actions);
+            if (actions.length == 10) {
+                let b = false;
+                for (let i = 0; i<10; i++) {
+                    if (actions[i] != secret_code[i]) b = true;
+                }
+                if (b == false) {
+                    alert("a8^` $b+,.! a*(v'@c*.`Cc;'@`2,=F@c9^")
+                }
+            }
+        })
+        
+    </script>
 </body>
 </html>
