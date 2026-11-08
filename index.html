@@ -1,46 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPMM9KL5KL"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-NPMM9KL5KL');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main page</title>
-</head>
-<body>
-    Url to math problems: 
-    <a href="./mathproblems/index.html">mathproblems</a>
-    
-    Url to cs problems:
-    <a href="./csproblems/index.html">CS PROBLEMS</a>
+	<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-NPMM9KL5KL"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
 
-    <script>
-        let actions = [];
-        let secret_code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]
-        document.addEventListener("keyup", event => {
-            if (actions.length >= 10) {
-                actions = actions.slice(1,10);
-            }
-            actions.push(event.key);
-            console.log(actions);
-            if (actions.length == 10) {
-                let b = false;
-                for (let i = 0; i<10; i++) {
-                    if (actions[i] != secret_code[i]) b = true;
-                }
-                if (b == false) {
-                    alert("a8^` $b+,.! a*(v'@c*.`Cc;'@`2,=F@c9^")
-                }
-            }
-        })
-        
-    </script>
-</body>
+			gtag("config", "G-NPMM9KL5KL");
+		</script>
+		<meta charset="UTF-8" />
+		<script src="./index.js" defer></script>
+        <link rel="stylesheet" href="./style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Main page</title>
+	</head>
+	<body>
+		<div class="navbar">
+			<div class="title">Tejas's Site or smth</div>
+			<div class="links">
+				<button onclick="change_theme()" id="theme_changer">Theme : Dark</button>
+			</div>
+		</div>
+		Hi there! <br />
+		I am Tejas.<br />
+		Commonly on the internet as TejasIsAmazing or TejasIsCool (= <span id="tejasisegotistical" style="display: inline-block">TejasIsEgotistical</span>)<br />
+		I enjoy almost all subjects, like, there is cool and awesome ideas everywhere.<br />
+		I like programming, and gaming, and maths, and science, and idk other stuff too.<br /><br />
+		I also enjoy puzzles, and putting secrets in places <span id="smiley" style="display: inline-block">:)</span><br />
+		I also have a youtube channel! <a href="https://www.youtube.com/channel/UCGMgHqeOdR_I_7jkE9JE9nA">TejasIsAmazing</a>
+		<script src="https://apis.google.com/js/platform.js"></script>
+		<div class="g-ytsubscribe" data-channelid="UCGMgHqeOdR_I_7jkE9JE9nA" data-layout="full" data-count="default"></div>
+		<hr />
+		<div style="white-space: pre-line">
+			<h2>Here are a few of my projects that I have made</h2>
+			- <a href="https://github.com/TejasIsCool/mcIVASmaker">mcIVASMaker</a> (Converts images/videos to minecraft blocks!)
+			- <a href="https://github.com/TejasIsCool/HTMLMathRenderer">HTMLMathRenderer</a> (Renders latex in html using html divs and stuff) - Some more i forgor
+		</div>
+
+		<!-- Url to math problems: 
+    <a href="./mathproblems/index.html">mathproblems</a> -->
+		<hr />
+		Url to cs problems:
+		<a href="./csproblems/index.html">CS PROBLEMS</a>
+
+		<script></script>
+	</body>
 </html>
