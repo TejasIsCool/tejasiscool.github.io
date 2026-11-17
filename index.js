@@ -80,3 +80,12 @@ function change_theme () {
     // console.log("TEST");
     
 }
+
+
+const titles = ["Tejas' Site", "Oh you clicked away", "Oh you are back!", "Oh bye!"]
+let tracker = 0;
+document.addEventListener("visibilitychange", () => {
+    tracker += 1;
+    tracker %= titles.length;
+    document.title = titles[tracker];
+});
