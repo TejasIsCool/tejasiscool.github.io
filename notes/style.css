@@ -1,0 +1,28 @@
+.course {
+    border: 1px solid black;
+}
+
+.course-text {
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.topics-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+}
+
+.course.open .topics-wrapper {
+    grid-template-rows: 1fr;
+}
+
+.topics-inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.topic {
+    padding-left: 2%;
+}   
